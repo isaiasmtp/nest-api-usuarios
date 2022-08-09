@@ -11,7 +11,7 @@ export class User {
     email: string;
 
     @IsNotEmpty()
-    senha: string;
+    password: string;
 
     @IsNotEmpty({
         message: 'Full name is required'
