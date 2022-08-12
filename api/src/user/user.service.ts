@@ -10,8 +10,13 @@ export class UserService {
     }
 
     public findOneByName (name: string): User {
-        return this.user.find(user => user.name === name);
+        return this.user.find(user => user.name == name);
     }
+
+    public findOneByUsername (name: string): User {
+        return this.user.find(user => user.username == name);
+    }
+
 
     public create (user: User): User {
         this.user.push(user);

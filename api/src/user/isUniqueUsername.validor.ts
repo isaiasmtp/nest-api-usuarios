@@ -3,13 +3,13 @@ import { registerDecorator, ValidationArguments, ValidationOptions, ValidatorCon
 import { UserService } from "./user.service";
 
 @Injectable()
-@ValidatorConstraint({ async: true })
+@ValidatorConstraint()
 export class IsUsernameUniqueConstraint implements ValidatorConstraintInterface {
 
     constructor(private userService: UserService){}
     
     validate(username: any, args: ValidationArguments) {
-        return !!!this.userService.findOneByName(username)
+        return !!!this.userService.findOneByUsername(username)
     }
 }
 
