@@ -1,3 +1,4 @@
+import { Exclude, Expose } from "class-transformer";
 import { IsEmail, IsNotEmpty, IsString } from "class-validator";
 import { IsUsernameUnique } from "./isUniqueUsername.validor";
 
@@ -22,6 +23,9 @@ export class User {
     @IsEmail()
     email: string;
 
+    @Exclude({
+        toPlainOnly: true
+    })
     @IsNotEmpty()
     password: string;
 
@@ -30,5 +34,8 @@ export class User {
     })
     fullName: string;
 
+    @Expose({
+        name: 'joinDate'
+    })
     createdAt: Date;
 }
