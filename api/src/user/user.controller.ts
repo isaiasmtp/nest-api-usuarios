@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Param, Post } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, NotFoundException, Param, Post } from "@nestjs/common";
 import { NestResponse } from "src/core/http/nest-response";
 import { NestResponseBuilder }  from "src/core/http/nest-response-build";
 
@@ -11,13 +11,26 @@ export class UserController {
     constructor(private userService: UserService){}
     
     @Get()
-    public getAll () : User[] {        
-        return this.userService.gellAll();
+    public getAll () : User[] {   
+        const users = this.userService.gellAll();
+        if(users.length > 0) return users 
+
+        throw new NotFoundException({
+            statusCode: HttpStatus.NOT_FOUND,
+            message: "No user found"
+        })     
+         
     }
 
     @Get('name/:name')
-    public findOneByName (@Param('name') name : string) : User {        
-        return this.userService.findOneByName(name);
+    public findOneByName (@Param('name') name : string) : User {    
+        const user = this.userService.findOneByName(name);    
+        if(user) return user 
+        throw new NotFoundException({
+            statusCode: HttpStatus.NOT_FOUND,
+            message: "User not found"
+        })
+         
     }
 
     @Post()
