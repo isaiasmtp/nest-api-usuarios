@@ -9,11 +9,12 @@ export class ExceptionHttp implements  ExceptionFilter {
         this.httpAdapter = adapterHost.httpAdapter;
     }
 
-    catch(exception: any, host: ArgumentsHost) {
+    catch(exception: any, host: ArgumentsHost) {                
         const context = host.switchToHttp();
         const req = context.getRequest();
         const res = context.getResponse();
-    
+        
+        // treatment to work with fastify and express
         const { status, body } = exception instanceof HttpException
             ? {
                 status: exception.getStatus(),
@@ -25,6 +26,7 @@ export class ExceptionHttp implements  ExceptionFilter {
                 body: {
                     statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
                     timestamp: new Date().toISOString(),
+                    message: exception.message,
                     path: req.path
                 }
             }
