@@ -1,4 +1,7 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, Res } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Param, Post } from "@nestjs/common";
+import { NestResponse } from "src/core/http/nest-response";
+import { NestResponseBuilder }  from "src/core/http/nest-response-build";
+
 import { User } from "./user.entity";
 import { UserService } from "./user.service";
 
@@ -18,13 +21,17 @@ export class UserController {
     }
 
     @Post()
-    public create (@Body() user: User, @Res() res) : void {        
+    public create (@Body() user: User) : NestResponse {        
         const newUser = this.userService.create(user);
 
-        //data model representative of the information
-        res.status(HttpStatus.CREATED)
-            .location(`/name/${user.username}`)
-            .json(newUser)
+        //data model representative of the information (Location) and generic - builder
+        return new NestResponseBuilder()
+            .status(HttpStatus.CREATED)
+            .headers({
+                'Location': `/name/${user.username}`
+            })
+            .body(newUser)
+            .build();
     }
 
 }
